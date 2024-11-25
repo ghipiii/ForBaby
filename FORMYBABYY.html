@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Voucher Teazzi</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        text-align: center;
+        background: linear-gradient(to bottom, #f9f5f6, #f8e8ee);
+        color: #333;
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        margin-top: 20px;
+        color: #f2bed1;
+      }
+      .voucher-container {
+        position: relative;
+        width: 300px;
+        height: 150px;
+        margin: 20px auto;
+        background: #fdcedf;
+        border: 2px solid #f2bed1;
+        overflow: hidden;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+      }
+      canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      .hidden-message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        color: #f9f5f6;
+        display: none;
+      }
+      .message-box {
+        width: 80%;
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background: rgba(248, 232, 238, 0.8);
+        color: #333;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        font-size: 16px;
+        line-height: 1.6;
+        text-align: left;
+      }
+      audio {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>HAI SAYANGGGG AKUUU !!!</h1>
+    <p>Baca dulu yang bawah baru gesek voucher ini yaaa hihihi 😊</p>
+
+    <!-- Voucher Container -->
+    <div class="voucher-container">
+      <canvas id="scratchCanvas" width="300" height="150"></canvas>
+      <div class="hidden-message">
+        YEAYYYY Selamat kamu mendapatkan voucher Teazzi!!! 🎉
+      </div>
+    </div>
+
+    <!-- Pesan Khusus -->
+    <div class="message-box">
+      <h2>Pesan untukmu</h2>
+      <p>
+        Sayang, i deeply regret my actions, words, and my behaviour. Please know
+        that it was never my intention to hurt you and i'm reallyyyyy realllyyy
+        sorry for the sadness i have caused. I valued our relationship and ur
+        feelings sayang. I hope you can truly forgive me babyy. I will try to do
+        better and learn from my past mistakes and learn to not repeat it in the
+        future. I AM TRULYYY SORRY FOR HURTING YOU BABYY. I WILL ALWAYS LOVE YOU
+        SAYANG. Terakhir ini ada voucher misterius dariku baby hihi. I love you
+        Amanda Gouw, ALWAYS! ❤️
+      </p>
+    </div>
+
+    <!-- Audio -->
+    <audio controls autoplay>
+      <source src="NB.mp3" type="audio/mpeg" />
+      Browser Anda tidak mendukung pemutar musik.
+    </audio>
+
+    <script>
+      const canvas = document.getElementById("scratchCanvas");
+      const ctx = canvas.getContext("2d");
+      const message = document.querySelector(".hidden-message");
+      let isDrawing = false;
+
+      // Isi area canvas dengan warna abu-abu
+      ctx.fillStyle = "#F8E8EE";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      canvas.addEventListener("mousedown", () => {
+        isDrawing = true;
+      });
+      canvas.addEventListener("mouseup", () => {
+        isDrawing = false;
+        checkScratch();
+      });
+      canvas.addEventListener("mousemove", (e) => {
+        if (!isDrawing) return;
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        // Bersihkan area yang disentuh
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.arc(x, y, 20, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      function checkScratch() {
+        const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        let clearPixels = 0;
+        for (let i = 0; i < pixels.data.length; i += 4) {
+          if (pixels.data[i + 3] === 0) clearPixels++;
+        }
+
+        console.log(
+          "Percentage cleared:",
+          clearPixels / (canvas.width * canvas.height)
+        );
+
+        // Jika 50% area sudah terhapus
+        if (clearPixels / (canvas.width * canvas.height) > 0.5) {
+          message.style.display = "block";
+        }
+      }
+    </script>
+  </body>
+</html>
